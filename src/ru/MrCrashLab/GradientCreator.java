@@ -5,15 +5,22 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class GradientCreator {
 
     private final String gradientsPath = "G:\\Java code\\FractalNFT\\src\\resources\\gradients\\Gradient_";
-    private final int gradientWidth = 1000;
-    private final int gradientHeight = 1000;
+    private final int gradientWidth = 2048;
+    private final int gradientHeight = 2048;
     private final String gradientFormatName = "jpg";
     private final ArrayList<Integer> colorList = new ArrayList<>();
+    private final int maxNumColor = 7;
+    private final int minNumColor = 3;
+    private final int numGrad = 1000;
 
     public GradientCreator() {
         colorList.add(new Color(215, 78, 78).getRGB());
@@ -33,16 +40,36 @@ public class GradientCreator {
         colorList.add(new Color(197, 71, 132).getRGB());
         colorList.add(new Color(47, 218, 31).getRGB());
         colorList.add(new Color(34, 124, 173).getRGB());
+        colorList.add(new Color(191, 252, 71).getRGB());
+        colorList.add(new Color(46, 35, 148).getRGB());
+        colorList.add(new Color(65, 227, 170).getRGB());
+        colorList.add(new Color(113, 29, 122).getRGB());
+        colorList.add(new Color(171, 64, 64).getRGB());
+        colorList.add(new Color(227, 108, 23).getRGB());
+        colorList.add(new Color(30, 225, 68).getRGB());
+        colorList.add(new Color(225, 30, 222).getRGB());
+        colorList.add(new Color(241, 219, 54).getRGB());
     }
 
     public void createGradient() {
-        for (int k = 0; k < 100; k++) {
-
-            int[] colors = {
-                    new Color(255, 0, 0).getRGB(),
-                    new Color(89, 197, 239).getRGB()};
+        Instant start = Instant.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
+        for (int k = 0; k < numGrad; k++) {
+            int colorNum = (int) (Math.random() * (maxNumColor - minNumColor + 1) + minNumColor);
+            int[] colors = new int[colorNum];
+            ArrayList<Integer> useIndex = new ArrayList<>();
+            for (int i = 0; i < colorNum; i++) {
+                int randIndex = (int) (Math.random() * colorList.size());
+                useIndex.add(randIndex);
+                colors[i] = colorList.get(randIndex);
+            }
             createLinearColorGradient(k, colors);
+            System.out.println("\u001B[34mГрадиентов отрендерено:\u001B[0m " + k);
         }
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println("\u001B[32mРендер завершен!\u001B[0m");
+        System.out.println("\u001B[36mВремени потрачено на рендер:\u001B[0m " + dateFormat.format(timeElapsed.toMillis()));
     }
 
     private void createLinearColorGradient(int k, int[] colors) {
@@ -62,7 +89,6 @@ public class GradientCreator {
                             (int) (colorZ.getBlue() + stepB * i)).getRGB());
 
                 }
-                System.out.println(i);
             }
         }
         try {
