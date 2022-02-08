@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
@@ -14,13 +13,14 @@ import java.util.ArrayList;
 public class GradientCreator {
 
     private final String gradientsPath = "G:\\Java code\\FractalNFT\\src\\resources\\gradients\\Gradient_";
-    private final int gradientWidth = 2048;
-    private final int gradientHeight = 2048;
     private final String gradientFormatName = "jpg";
+    private final int gradientWidth = 1;
+    private final int gradientHeight = 65500;
     private final ArrayList<Integer> colorList = new ArrayList<>();
-    private final int maxNumColor = 7;
-    private final int minNumColor = 3;
-    private final int numGrad = 1000;
+    private final int maxNumColor = 25;
+    private final int minNumColor = 20;
+    private final int numGrad = 10;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
 
     public GradientCreator() {
         colorList.add(new Color(215, 78, 78).getRGB());
@@ -53,7 +53,6 @@ public class GradientCreator {
 
     public void createGradient() {
         Instant start = Instant.now();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
         for (int k = 0; k < numGrad; k++) {
             int colorNum = (int) (Math.random() * (maxNumColor - minNumColor + 1) + minNumColor);
             int[] colors = new int[colorNum];
@@ -64,7 +63,7 @@ public class GradientCreator {
                 colors[i] = colorList.get(randIndex);
             }
             createLinearColorGradient(k, colors);
-            System.out.println("\u001B[34mГрадиентов отрендерено:\u001B[0m " + k);
+            System.out.println("\u001B[34mГрадиентов отрендерено:\u001B[0m " + (k+1));
         }
         Instant end = Instant.now();
         Duration timeElapsed = Duration.between(start, end);
@@ -87,7 +86,6 @@ public class GradientCreator {
                             (int) (colorZ.getRed() + stepR * i),
                             (int) (colorZ.getGreen() + stepG * i),
                             (int) (colorZ.getBlue() + stepB * i)).getRGB());
-
                 }
             }
         }
